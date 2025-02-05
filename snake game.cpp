@@ -1,8 +1,7 @@
 #include <iostream>
-#include <chrono>
-#include <iostream>
 #include <cstdlib> 
 #include <ctime>
+#include<windows.h>
 using namespace std;
 void print_layout(string (&a)[50][50])
 {
@@ -56,6 +55,9 @@ int main()
     int point_x=random_x(48);
     int point_y=random_y(48);
     a[point_x][point_y]="0";
+    Sleep(2000);
     print_layout(a);
-    }while(loss_check!=1);
+    loss_check++;
+    }while(loss_check!=10);
+    return 0;
 }
