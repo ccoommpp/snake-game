@@ -3,56 +3,50 @@
 #include <ctime>
 #include <windows.h>
 #include <conio.h>
-
+#include <bits/stdc++.h>
 using namespace std;
 
-void movements(string (&a)[10][20], char &direction, bool &loss_check, int &x, int &y,int &fruit_count)
+void movements(string (&a)[10][20], char &direction, bool &loss_check, deque<pair<int, int>> &snake, int &fruit_count)
 {
-    if (a[x][y] == "H") 
-    {  
-        a[x][y] = " ";  
-    }
-    else if (a[x][y] == "*")
+    int x = snake.front().first;
+    int y = snake.front().second;
+    
+    
+    pair<int, int> tail = snake.back();
+    a[tail.first][tail.second] = " ";
+
+    if (direction == 'w') x--;
+    else if (direction == 's') x++;
+    else if (direction == 'a') y--;
+    else if (direction == 'd') y++;
+
+    
+    if (a[x][y] == "*" || a[x][y] == "H") 
     {
         loss_check = true;
         return;
     }
 
-    if (direction == 'w')
+    
+    if (a[x][y] == "0") 
     {
-        x--;
-    }
-    else if (direction == 's')
+        fruit_count--;
+    } 
+    else 
     {
-        x++;
-    }
-    else if (direction == 'a')
-    {
-        y--;
-    }
-    else if (direction == 'd')
-    {
-        y++;
+        snake.pop_back();
     }
 
-    if (a[x][y] == "*")
-    {
-        loss_check = true;
-        return;
-    }
-    else if(a[x][y]=="0")
-    {
-        fruit_count++;
-    }
+    
+    snake.push_front({x, y});
     a[x][y] = "H";
 }
 
 char input(char currentDirection) 
 {
     char direction = currentDirection; 
-
-    int timeLimit = 1000; 
-    int step = 50;     
+    int timeLimit = 500; 
+    int step = 100;     
     int elapsedTime = 0;
 
     while (elapsedTime < timeLimit)
@@ -60,11 +54,8 @@ char input(char currentDirection)
         if (_kbhit())  
         {  
             char newDirection = _getch();  
-            
-         
             if (newDirection == 'w' || newDirection == 'a' || newDirection == 's' || newDirection == 'd') 
             {
-                
                 if (!((direction == 'w' && newDirection == 's') || 
                       (direction == 's' && newDirection == 'w') ||
                       (direction == 'a' && newDirection == 'd') ||
@@ -77,24 +68,26 @@ char input(char currentDirection)
         Sleep(step);
         elapsedTime += step;
     }
-
     return direction; 
 }
 
-
 void fruits(string (&a)[10][20], int &fruit_count)
 {
-    int x = rand() % 7 + 1;
-    int y = rand() % 17 + 1; 
-
-    if (fruit_count == 0)
+    if (fruit_count == 0) 
     {
+        int x, y;
+        do {
+            x = rand() % 8 + 1;
+            y = rand() % 18 + 1;
+        } while (a[x][y] != " "); 
+
         a[x][y] = "0";
-        fruit_count--;
+        fruit_count++;
     }
 }
 
-void print(string (&a)[10][20]) {
+void print(string (&a)[10][20]) 
+{
     system("cls");
     for (int i = 0; i < 10; i++)
     {
@@ -112,39 +105,35 @@ int main()
     int fruit_count = 0;
     string a[10][20]{};
     bool loss_check = false;
-
-    for (int i = 0; i < 20; i++)
-    {
-        a[0][i] = "*";
-    }
+    
+    
+    for (int i = 0; i < 20; i++) a[0][i] = "*";
     for (int i = 1; i < 9; i++)
     {
         a[i][0] = "*";
-        for (int j = 1; j < 19; j++)
-        {
-            a[i][j] = " ";
-        }     
+        for (int j = 1; j < 19; j++) a[i][j] = " ";
         a[i][19] = "*";
     }
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 20; i++) a[9][i] = "*";
+
+    
+    deque<pair<int, int>> snake;
+    snake.push_back({5, 10});
+    a[5][10] = "H";
+
+    char direction; 
+
+    while (!loss_check)
     {
-        a[9][i] = "*";
+        fruits(a, fruit_count);
+        print(a);
+        Sleep(200);
+        direction = input(direction);
+        movements(a, direction, loss_check, snake, fruit_count);
     }
 
-    int x = 5;
-    int y = 10;
-    a[x][y] = "H";
-    char dirt;
-
-while (!loss_check)
-{
-    fruits(a,fruit_count);
-    print(a);
-    Sleep(200); 
-    dirt = input(dirt);  
-    movements(a, dirt, loss_check, x, y,fruit_count);  
-
+    cout << "Game Over!" << endl;
 }
-}
+
 
 
