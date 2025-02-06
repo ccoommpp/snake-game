@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void movements(string (&a)[10][20], char &direction, bool &loss_check, int &x, int &y)
+void movements(string (&a)[10][20], char &direction, bool &loss_check, int &x, int &y,int &fruit_count)
 {
     if (a[x][y] == "H") 
     {  
@@ -39,6 +39,10 @@ void movements(string (&a)[10][20], char &direction, bool &loss_check, int &x, i
     {
         loss_check = true;
         return;
+    }
+    else if(a[x][y]=="0")
+    {
+        fruit_count++;
     }
     a[x][y] = "H";
 }
@@ -86,7 +90,7 @@ void fruits(string (&a)[10][20], int &fruit_count)
     if (fruit_count == 0)
     {
         a[x][y] = "0";
-        fruit_count++;
+        fruit_count--;
     }
 }
 
@@ -134,10 +138,12 @@ int main()
 
 while (!loss_check)
 {
+    fruits(a,fruit_count);
     print(a);
     Sleep(200); 
     dirt = input(dirt);  
-    movements(a, dirt, loss_check, x, y);  
+    movements(a, dirt, loss_check, x, y,fruit_count);  
+
 }
 }
 
