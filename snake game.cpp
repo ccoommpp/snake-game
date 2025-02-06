@@ -6,6 +6,24 @@
 
 using namespace std;
 
+char input() {
+    int timeLimit = 1000; 
+    int step = 50;      
+    int elapsedTime = 0;
+    char direction = 'w'; 
+
+    while (elapsedTime < timeLimit) {
+        if (_kbhit()) {  
+            char ch = _getch(); 
+            if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd') {
+                return ch; 
+            }
+        }
+        Sleep(step);
+        elapsedTime += step;
+    }
+    return direction; 
+}
 void fruits(string (&a)[10][20], int &fruit_count)
 {
     int x = rand() % 7+1;
@@ -58,7 +76,13 @@ int main() {
         fruits(a, fruit_count);
         print(a);
         Sleep(2000);
-        system("cls");
+        char a=input();
+        cout<<a;
+        Sleep(5000);
+        /*movement();
+        bool loss_check=loss_chq(a);
+        system("cls");*/
+
     }
 }
 
