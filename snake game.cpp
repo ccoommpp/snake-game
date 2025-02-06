@@ -6,68 +6,82 @@
 
 using namespace std;
 
-void movements(string (&a)[10][20],char &direction,bool &loss_check,int &x,int &y)
+void movements(string (&a)[10][20], char &direction, bool &loss_check, int &x, int &y)
 {
-    if (a[x][y]=="H") 
+    if (a[x][y] == "H") 
     {  
-    a[x][y] =" ";  // Replace 'H' with a space
+        a[x][y] = " ";  
     }
-    else if(a[x][y]=="*")
+    else if (a[x][y] == "*")
     {
-        loss_check=true;
+        loss_check = true;
         return;
     }
-    if(direction=='w')
+
+    if (direction == 'w')
     {
         x--;
     }
-    else if(direction=='s')
+    else if (direction == 's')
     {
         x++;
     }
-    else if(direction=='a')
+    else if (direction == 'a')
     {
         y--;
     }
-    else if(direction=='d')
+    else if (direction == 'd')
     {
         y++;
     }
 
-    if(a[x][y]=="*")
+    if (a[x][y] == "*")
     {
-        loss_check=true;
+        loss_check = true;
         return;
     }
-    a[x][y]="H";
+    a[x][y] = "H";
 }
 
-char input() 
+char input(char currentDirection) 
 {
-    char direction;
+    char direction = currentDirection; 
+
     int timeLimit = 1000; 
-    int step = 100;      
+    int step = 50;     
     int elapsedTime = 0;
-    cout<<"\n enter now \n";
-    while (elapsedTime < timeLimit) 
+
+    while (elapsedTime < timeLimit)
     {
-        if (_kbhit()) 
+        if (_kbhit())  
         {  
-            direction = _getch(); 
-            if (direction == 'w' || direction == 'a' || direction == 's' || direction == 'd') 
+            char newDirection = _getch();  
+            
+         
+            if (newDirection == 'w' || newDirection == 'a' || newDirection == 's' || newDirection == 'd') 
             {
-                return direction; 
+                
+                if (!((direction == 'w' && newDirection == 's') || 
+                      (direction == 's' && newDirection == 'w') ||
+                      (direction == 'a' && newDirection == 'd') ||
+                      (direction == 'd' && newDirection == 'a')))
+                {
+                    return newDirection; 
+                }
             }
         }
         Sleep(step);
         elapsedTime += step;
     }
+
     return direction; 
 }
+
+
 void fruits(string (&a)[10][20], int &fruit_count)
 {
-    int x = rand() % 7+1;
-    int y = rand() % 17+1; 
+    int x = rand() % 7 + 1;
+    int y = rand() % 17 + 1; 
 
     if (fruit_count == 0)
     {
@@ -77,6 +91,7 @@ void fruits(string (&a)[10][20], int &fruit_count)
 }
 
 void print(string (&a)[10][20]) {
+    system("cls");
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 20; j++)
@@ -93,6 +108,7 @@ int main()
     int fruit_count = 0;
     string a[10][20]{};
     bool loss_check = false;
+
     for (int i = 0; i < 20; i++)
     {
         a[0][i] = "*";
@@ -100,27 +116,29 @@ int main()
     for (int i = 1; i < 9; i++)
     {
         a[i][0] = "*";
-        for(int j=1;j<19;j++)
+        for (int j = 1; j < 19; j++)
         {
-            a[i][j]=" ";
+            a[i][j] = " ";
         }     
-        a[i][19]="*";
+        a[i][19] = "*";
     }
     for (int i = 0; i < 20; i++)
     {
         a[9][i] = "*";
     }
-    int x=5;
-    int y=10;
-    a[x][y]="H";
-    while(!loss_check)
-    {
-        /*fruits(a, fruit_count);*/
-        print(a);
-        Sleep(2000);
-        char direction=input();
-        Sleep(2000);
-        movements(a,direction,loss_check,x,y);
-    }
+
+    int x = 5;
+    int y = 10;
+    a[x][y] = "H";
+    char dirt;
+
+while (!loss_check)
+{
+    print(a);
+    Sleep(200); 
+    dirt = input(dirt);  
+    movements(a, dirt, loss_check, x, y);  
 }
+}
+
 
