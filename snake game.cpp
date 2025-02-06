@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void movements(string (&a)[10][20],char &A,bool &loss_check,int &x,int &y)
+void movements(string (&a)[10][20],char &direction,bool &loss_check,int &x,int &y)
 {
     if (a[x][y]=="H") 
     {  
@@ -17,19 +17,19 @@ void movements(string (&a)[10][20],char &A,bool &loss_check,int &x,int &y)
         loss_check=true;
         return;
     }
-    if(A=='w')
+    if(direction=='w')
     {
         x--;
     }
-    else if(A=='s')
+    else if(direction=='s')
     {
         x++;
     }
-    else if(A=='a')
+    else if(direction=='a')
     {
         y--;
     }
-    else if(A=='d')
+    else if(direction=='d')
     {
         y++;
     }
@@ -42,8 +42,9 @@ void movements(string (&a)[10][20],char &A,bool &loss_check,int &x,int &y)
     a[x][y]="H";
 }
 
-char input(char &direction) 
+char input() 
 {
+    char direction;
     int timeLimit = 1000; 
     int step = 100;      
     int elapsedTime = 0;
@@ -52,10 +53,9 @@ char input(char &direction)
     {
         if (_kbhit()) 
         {  
-            char ch = _getch(); 
-            if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd') 
+            direction = _getch(); 
+            if (direction == 'w' || direction == 'a' || direction == 's' || direction == 'd') 
             {
-                direction=ch;
                 return direction; 
             }
         }
@@ -87,8 +87,8 @@ void print(string (&a)[10][20]) {
     }
 }
 
-int main() {
-    char direction='w';
+int main() 
+{
     srand(time(0));
     int fruit_count = 0;
     string a[10][20]{};
@@ -118,10 +118,9 @@ int main() {
         /*fruits(a, fruit_count);*/
         print(a);
         Sleep(2000);
-        direction=input(direction);
+        char direction=input();
         Sleep(2000);
         movements(a,direction,loss_check,x,y);
-        system("cls");
     }
 }
 
