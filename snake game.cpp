@@ -21,7 +21,7 @@ void movements(string (&a)[10][20], char &direction, bool &loss_check, deque<pai
     else if (direction == 'd') y++;
 
     
-    if (a[x][y] == "*" || a[x][y] == "H") 
+    if (a[x][y] == "*" || a[x][y] == "O") 
     {
         loss_check = true;
         return;
@@ -39,7 +39,7 @@ void movements(string (&a)[10][20], char &direction, bool &loss_check, deque<pai
 
     
     snake.push_front({x, y});
-    a[x][y] = "H";
+    a[x][y] = "O";
 }
 
 char input(char currentDirection) 
@@ -119,7 +119,7 @@ int main()
     
     deque<pair<int, int>> snake;
     snake.push_back({5, 10});
-    a[5][10] = "H";
+    a[5][10] = "O";
 
     char direction; 
 
